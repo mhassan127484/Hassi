@@ -21,6 +21,13 @@ export interface ProductInput {
   status: AdminProduct["status"];
   colors: VariantInput[];
   images: string[];
+  sizes: string[];
+  drop: string;
+  description: string;
+  highlights: string[];
+  details: Record<string, string>;
+  shipping: string;
+  returns: string;
 }
 
 function shade(hex: string, amount: number): string {
@@ -95,27 +102,30 @@ export async function createProduct(input: ProductInput) {
       category: input.category,
       stock: input.stock,
       status: input.status,
-      sizes: ["S", "M", "L", "XL"],
-      drop_name: "Vol. 02",
-      shipping: "Free standard shipping on orders over PKR 15,000.",
-      returns: "30-day returns on unworn pieces with tags attached.",
+      sizes: input.sizes,
+      drop_name: input.drop,
+      description: input.description,
+      highlights: input.highlights,
+      details: input.details,
+      shipping: input.shipping,
+      returns: input.returns,
     })
     .select("id")
     .single();
-  if (error || !product) throw error ?? new Error("Failed to create product");
+  if (error || !product) throw new Error(error?.message ?? "Failed to create product");
 
   if (input.colors.length) {
     const { error: colorError } = await supabase.from("product_colors").insert(
       input.colors.map((c, i) => ({ product_id: product.id, name: c.name, hex: c.hex, image_url: c.imageUrl, sort_order: i }))
     );
-    if (colorError) throw colorError;
+    if (colorError) throw new Error(colorError.message);
   }
 
   if (input.images.length) {
     const { error: imageError } = await supabase.from("product_images").insert(
       input.images.map((url, i) => ({ product_id: product.id, image_url: url, sort_order: i }))
     );
-    if (imageError) throw imageError;
+    if (imageError) throw new Error(imageError.message);
   }
 
   revalidatePath("/admin/products");
@@ -128,16 +138,30 @@ export async function updateProduct(id: string, input: ProductInput) {
 
   const { error } = await supabase
     .from("products")
-    .update({ name: input.name, brand: input.brand, price: input.price, category: input.category, stock: input.stock, status: input.status })
+    .update({
+      name: input.name,
+      brand: input.brand,
+      price: input.price,
+      category: input.category,
+      stock: input.stock,
+      status: input.status,
+      sizes: input.sizes,
+      drop_name: input.drop,
+      description: input.description,
+      highlights: input.highlights,
+      details: input.details,
+      shipping: input.shipping,
+      returns: input.returns,
+    })
     .eq("id", id);
-  if (error) throw error;
+  if (error) throw new Error(error.message);
 
   await supabase.from("product_colors").delete().eq("product_id", id);
   if (input.colors.length) {
     const { error: colorError } = await supabase.from("product_colors").insert(
       input.colors.map((c, i) => ({ product_id: id, name: c.name, hex: c.hex, image_url: c.imageUrl, sort_order: i }))
     );
-    if (colorError) throw colorError;
+    if (colorError) throw new Error(colorError.message);
   }
 
   await supabase.from("product_images").delete().eq("product_id", id);
@@ -145,7 +169,7 @@ export async function updateProduct(id: string, input: ProductInput) {
     const { error: imageError } = await supabase.from("product_images").insert(
       input.images.map((url, i) => ({ product_id: id, image_url: url, sort_order: i }))
     );
-    if (imageError) throw imageError;
+    if (imageError) throw new Error(imageError.message);
   }
 
   revalidatePath("/admin/products");
@@ -156,7 +180,7 @@ export async function deleteProduct(id: string) {
   await assertAdmin();
   const supabase = createClient();
   const { error } = await supabase.from("products").delete().eq("id", id);
-  if (error) throw error;
+  if (error) throw new Error(error.message);
   revalidatePath("/admin/products");
   revalidatePath("/shop");
 }
@@ -172,7 +196,7 @@ export async function uploadProductImage(formData: FormData): Promise<string> {
   // Storage RLS also allows this for admins, but the service-role client avoids an extra round trip for the check.
   const admin = createAdminClient();
   const { error } = await admin.storage.from("product-images").upload(path, file, { contentType: file.type });
-  if (error) throw error;
+  if (error) throw new Error(error.message);
 
   const { data } = admin.storage.from("product-images").getPublicUrl(path);
   return data.publicUrl;

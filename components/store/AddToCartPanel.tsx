@@ -21,7 +21,8 @@ export default function AddToCartPanel({
   onColorChange: (i: number) => void;
 }) {
   const router = useRouter();
-  const [size, setSize] = useState<string | null>(null);
+  const requiresSize = product.sizes.length > 0;
+  const [size, setSize] = useState<string | null>(requiresSize ? null : "One Size");
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const addItem = useCartStore((s) => s.addItem);
@@ -29,6 +30,7 @@ export default function AddToCartPanel({
 
   const activeColor = product.colors[activeColorIndex] ?? product.colors[0];
   const outOfStock = product.stock <= 0;
+  const canAdd = !!size && !outOfStock;
 
   const buildLine = () => ({
     productId: product.id,
@@ -42,7 +44,7 @@ export default function AddToCartPanel({
   });
 
   const handleAdd = () => {
-    if (!size) return;
+    if (!canAdd) return;
     addItem(buildLine());
     setAdded(true);
     push(`${product.name} added to bag`, "success");
@@ -50,7 +52,7 @@ export default function AddToCartPanel({
   };
 
   const handleBuyNow = () => {
-    if (!size) return;
+    if (!canAdd) return;
     addItem(buildLine());
     router.push("/checkout");
   };
@@ -77,24 +79,26 @@ export default function AddToCartPanel({
       </div>
 
       <div className="mt-8 flex items-center justify-between">
-        <p className="font-body text-xs uppercase tracking-widest text-stone">Size</p>
+        <p className="font-body text-xs uppercase tracking-widest text-stone">{requiresSize ? "Size" : "Availability"}</p>
         <span className="font-body text-xs text-ink/50">{outOfStock ? "Out of stock" : `${product.stock} in stock`}</span>
       </div>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {product.sizes.map((s) => (
-          <button
-            key={s}
-            onClick={() => setSize(s)}
-            disabled={outOfStock}
-            className={clsx(
-              "flex h-11 min-w-[2.75rem] items-center justify-center rounded-full border px-3 font-body text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40",
-              size === s ? "border-ink bg-ink text-paper" : "border-ink/20 text-ink hover:border-ink/50"
-            )}
-          >
-            {s}
-          </button>
-        ))}
-      </div>
+      {requiresSize && (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {product.sizes.map((s) => (
+            <button
+              key={s}
+              onClick={() => setSize(s)}
+              disabled={outOfStock}
+              className={clsx(
+                "flex h-11 min-w-[2.75rem] items-center justify-center rounded-full border px-3 font-body text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40",
+                size === s ? "border-ink bg-ink text-paper" : "border-ink/20 text-ink hover:border-ink/50"
+              )}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="mt-8 flex items-center gap-4">
         <p className="font-body text-xs uppercase tracking-widest text-stone">Qty</p>

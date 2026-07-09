@@ -43,6 +43,13 @@ export default function AdminProductsPage() {
       status: form.status,
       colors: form.colors,
       images: form.images,
+      sizes: form.sizes,
+      drop: form.drop,
+      description: form.description,
+      highlights: form.highlights,
+      details: form.details,
+      shipping: form.shipping,
+      returns: form.returns,
     };
     if (editing) {
       await updateProduct(editing.id, input);

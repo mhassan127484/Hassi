@@ -14,7 +14,7 @@ export default function LineChartCard<T extends Record<string, unknown>>({
   data: T[];
   dataKey: string;
   xKey: string;
-  /** Format tooltip values as PKR currency. Defaults to true since every current usage is a currency series. */
+  /** Format tooltip values as USD currency. Defaults to true since every current usage is a currency series. */
   currency?: boolean;
 }) {
   return (

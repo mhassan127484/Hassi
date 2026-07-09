@@ -164,6 +164,6 @@ export async function searchProducts(query: string): Promise<Product[]> {
     .slice(0, 6);
 }
 
-export function formatPrice(paisaOrRupees: number): string {
-  return "PKR " + Math.round(paisaOrRupees).toLocaleString("en-PK");
+export function formatPrice(pkr: number): string {
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(pkr / 278);
 }

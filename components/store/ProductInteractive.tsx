@@ -20,6 +20,7 @@ export default function ProductInteractive({
     <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-16">
       <ProductGallery
         colors={product.colors}
+        images={product.images}
         activeIndex={activeColorIndex}
         onSelect={setActiveColorIndex}
         drop={product.drop}

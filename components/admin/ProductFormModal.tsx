@@ -36,11 +36,21 @@ export type ProductFormState = {
   status: AdminProduct["status"];
   colors: VariantForm[];
   photos: PhotoForm[];
+  sizes: string;
+  drop: string;
+  description: string;
+  highlights: string;
+  details: string;
+  shipping: string;
+  returns: string;
 };
 
-export type ResolvedProductFormState = Omit<ProductFormState, "colors" | "photos"> & {
+export type ResolvedProductFormState = Omit<ProductFormState, "colors" | "photos" | "sizes" | "highlights" | "details"> & {
   colors: { name: string; hex: string; imageUrl?: string }[];
   images: string[];
+  sizes: string[];
+  highlights: string[];
+  details: Record<string, string>;
 };
 
 const blankVariant: VariantForm = { name: "Ink", hex: "#111114" };
@@ -53,6 +63,13 @@ const blank: ProductFormState = {
   status: "Active",
   colors: [blankVariant],
   photos: [],
+  sizes: "S, M, L, XL",
+  drop: "Vol. 01",
+  description: "",
+  highlights: "",
+  details: "",
+  shipping: "Free standard shipping on orders over $54.",
+  returns: "30-day returns on unworn pieces with tags attached.",
 };
 
 function colorsToForm(colors: AdminProduct["colors"]): VariantForm[] {
@@ -61,6 +78,22 @@ function colorsToForm(colors: AdminProduct["colors"]): VariantForm[] {
 
 function photosToForm(images: AdminProduct["images"]): PhotoForm[] {
   return images.map((url) => ({ existingUrl: url }));
+}
+
+function detailsToForm(details: Record<string, string>): string {
+  return Object.entries(details).map(([k, v]) => `${k}: ${v}`).join("\n");
+}
+
+function parseDetails(text: string): Record<string, string> {
+  const details: Record<string, string> = {};
+  text.split("\n").forEach((line) => {
+    const i = line.indexOf(":");
+    if (i === -1) return;
+    const key = line.slice(0, i).trim();
+    const value = line.slice(i + 1).trim();
+    if (key && value) details[key] = value;
+  });
+  return details;
 }
 
 export default function ProductFormModal({
@@ -89,6 +122,13 @@ export default function ProductFormModal({
         status: initial.status,
         colors: colorsToForm(initial.colors),
         photos: photosToForm(initial.images),
+        sizes: initial.sizes.join(", "),
+        drop: initial.drop,
+        description: initial.description,
+        highlights: initial.highlights.join("\n"),
+        details: detailsToForm(initial.details),
+        shipping: initial.shipping,
+        returns: initial.returns,
       });
     } else {
       setForm(blank);
@@ -183,6 +223,13 @@ export default function ProductFormModal({
         status: form.status,
         colors: resolvedColors,
         images: resolvedImages,
+        sizes: form.sizes.split(",").map((s) => s.trim()).filter(Boolean),
+        drop: form.drop,
+        description: form.description,
+        highlights: form.highlights.split("\n").map((h) => h.trim()).filter(Boolean),
+        details: parseDetails(form.details),
+        shipping: form.shipping,
+        returns: form.returns,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -241,12 +288,63 @@ export default function ProductFormModal({
           <select
             value={form.status}
             onChange={(e) => setForm({ ...form, status: e.target.value as AdminProduct["status"] })}
-            className="rounded-sm border border-ink/20 bg-transparent px-4 py-2.5 font-body text-sm text-ink focus:border-ink/60 focus:outline-none sm:col-span-2"
+            className="rounded-sm border border-ink/20 bg-transparent px-4 py-2.5 font-body text-sm text-ink focus:border-ink/60 focus:outline-none"
           >
             <option value="Active">Active</option>
             <option value="Draft">Draft</option>
             <option value="Archived">Archived</option>
           </select>
+          <input
+            placeholder="Drop (e.g. Vol. 01)"
+            value={form.drop}
+            onChange={(e) => setForm({ ...form, drop: e.target.value })}
+            className="rounded-sm border border-ink/20 bg-transparent px-4 py-2.5 font-body text-sm text-ink focus:border-ink/60 focus:outline-none"
+          />
+          <input
+            placeholder="Sizes, comma separated (blank = one size)"
+            value={form.sizes}
+            onChange={(e) => setForm({ ...form, sizes: e.target.value })}
+            className="rounded-sm border border-ink/20 bg-transparent px-4 py-2.5 font-body text-sm text-ink focus:border-ink/60 focus:outline-none sm:col-span-2"
+          />
+        </div>
+
+        <div className="space-y-4">
+          <p className="font-body text-xs uppercase tracking-widest text-stone">Details</p>
+          <textarea
+            placeholder="Description"
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            rows={3}
+            className="w-full rounded-sm border border-ink/20 bg-transparent px-4 py-2.5 font-body text-sm text-ink focus:border-ink/60 focus:outline-none"
+          />
+          <textarea
+            placeholder={"Highlights, one per line\ne.g. 100% merino wool"}
+            value={form.highlights}
+            onChange={(e) => setForm({ ...form, highlights: e.target.value })}
+            rows={4}
+            className="w-full rounded-sm border border-ink/20 bg-transparent px-4 py-2.5 font-body text-sm text-ink focus:border-ink/60 focus:outline-none"
+          />
+          <textarea
+            placeholder={"Size & Fit, one \"Key: Value\" per line\ne.g. Material: 100% merino wool\nFit: Relaxed, true to size"}
+            value={form.details}
+            onChange={(e) => setForm({ ...form, details: e.target.value })}
+            rows={4}
+            className="w-full rounded-sm border border-ink/20 bg-transparent px-4 py-2.5 font-body text-sm text-ink focus:border-ink/60 focus:outline-none"
+          />
+          <textarea
+            placeholder="Shipping"
+            value={form.shipping}
+            onChange={(e) => setForm({ ...form, shipping: e.target.value })}
+            rows={2}
+            className="w-full rounded-sm border border-ink/20 bg-transparent px-4 py-2.5 font-body text-sm text-ink focus:border-ink/60 focus:outline-none"
+          />
+          <textarea
+            placeholder="Returns"
+            value={form.returns}
+            onChange={(e) => setForm({ ...form, returns: e.target.value })}
+            rows={2}
+            className="w-full rounded-sm border border-ink/20 bg-transparent px-4 py-2.5 font-body text-sm text-ink focus:border-ink/60 focus:outline-none"
+          />
         </div>
 
         <div>

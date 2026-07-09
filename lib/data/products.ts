@@ -65,7 +65,7 @@ function colorway(name: string, hex: string, tile: [string, string]): ProductCol
 const CARE = "Dry clean only";
 const MADE = "Made in Karachi, Pakistan";
 const SHIPPING =
-  "Free standard shipping on orders over PKR 15,000. Standard delivery in 5–7 business days, express in 2–3 business days for PKR 1,500.";
+  "Free standard shipping on orders over $54. Standard delivery in 5–7 business days, express in 2–3 business days for $5.";
 const RETURNS =
   "30-day returns on unworn pieces with tags attached. Store credit issued instantly; refunds to original payment method within 5–7 business days.";
 
@@ -471,6 +471,9 @@ export function getRelatedProducts(product: Product, count = 4): Product[] {
     .slice(0, count);
 }
 
-export function formatPrice(paisaOrRupees: number): string {
-  return "PKR " + Math.round(paisaOrRupees).toLocaleString("en-PK");
+/** Stored prices are PKR amounts; display converts to USD at a fixed rate. */
+export const PKR_TO_USD_RATE = 278;
+
+export function formatPrice(pkr: number): string {
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(pkr / PKR_TO_USD_RATE);
 }

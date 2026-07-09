@@ -1,7 +1,7 @@
 import { Truck, RotateCcw, ShieldCheck } from "lucide-react";
 
 const items = [
-  { icon: Truck, label: "Free Shipping", sub: "Orders over PKR 15,000" },
+  { icon: Truck, label: "Free Shipping", sub: "Orders over $54" },
   { icon: RotateCcw, label: "Easy Returns", sub: "30-day window" },
   { icon: ShieldCheck, label: "Secure Payment", sub: "COD available" },
 ];

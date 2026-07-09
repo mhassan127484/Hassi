@@ -1,5 +1,5 @@
 const items = [
-  "Free shipping over PKR 15,000",
+  "Free shipping over $54",
   "Vol. 01 — now live",
   "Made for Karachi weather",
   "COD · JazzCash · Easypaisa",
