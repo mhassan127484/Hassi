@@ -41,7 +41,7 @@ export default async function AdminDashboardPage() {
             <div className="mt-4 space-y-4">
               {topProducts.map((p) => (
                 <div key={p.id} className="flex items-center gap-3">
-                  <ProductTile tile={p.colors[0]?.tile ?? ["#111114", "#2A2A30"]} image={p.colors[0]?.image} className="h-12 w-10 flex-shrink-0 rounded-sm" />
+                  <ProductTile tile={p.colors[0]?.tile ?? ["#111114", "#2A2A30"]} image={p.colors[0]?.image ?? p.images[0]} className="h-12 w-10 flex-shrink-0 rounded-sm" />
                   <div className="flex-1">
                     <p className="font-body text-sm text-ink">{p.name}</p>
                     <p className="font-body text-xs text-ink/50">{p.reviewCount} reviews</p>

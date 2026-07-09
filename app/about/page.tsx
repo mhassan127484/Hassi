@@ -22,7 +22,7 @@ export default function AboutPage() {
           </h1>
           <div className="mt-8 space-y-5 font-body text-base leading-relaxed text-ink/70">
             <p>
-              Hassi started in Karachi as a question: could a small studio make pieces that stood next
+              Hassi started as a question: could a small studio make pieces that stood next
               to anything coming out of Milan or Tokyo, without pretending to be from either place.
             </p>
             <p>

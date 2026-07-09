@@ -110,7 +110,7 @@ export default function Footer() {
         </motion.div>
 
         <div className="flex flex-col items-start justify-between gap-4 border-t border-paper/15 py-8 font-body text-xs uppercase tracking-widest text-paper/50 md:flex-row md:items-center">
-          <span>© {new Date().getFullYear()} Hassi. Karachi.</span>
+          <span>© {new Date().getFullYear()} Hassi.</span>
           <div className="flex items-center gap-3 text-paper/40">
             <span>Visa</span>
             <span>Mastercard</span>

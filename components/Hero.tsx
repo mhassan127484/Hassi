@@ -30,14 +30,6 @@ export default function Hero({ heroProduct }: { heroProduct?: Product }) {
         >
           Autumn / Winter
         </motion.p>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.1 }}
-          className="hidden font-body text-xs uppercase tracking-widest text-stone md:block"
-        >
-          Karachi, PK
-        </motion.p>
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-6">

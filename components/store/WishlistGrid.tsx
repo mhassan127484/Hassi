@@ -52,7 +52,7 @@ export default function WishlistGrid() {
         <div key={product.id}>
           <div className="relative overflow-hidden rounded-sm">
             <Link href={`/product/${product.slug}`}>
-              <ProductTile tile={product.colors[0].tile} image={product.colors[0].image} className="aspect-[4/5]" />
+              <ProductTile tile={product.colors[0]?.tile ?? ["#111114", "#2A2A30"]} image={product.colors[0]?.image ?? product.images[0]} className="aspect-[4/5]" />
             </Link>
             <button
               onClick={() => { remove(product.slug); push("Removed from wishlist"); }}
@@ -77,8 +77,8 @@ export default function WishlistGrid() {
                 slug: product.slug,
                 name: product.name,
                 price: product.price,
-                color: product.colors[0].name,
-                colorTile: product.colors[0].tile,
+                color: product.colors[0]?.name ?? "",
+                colorTile: product.colors[0]?.tile ?? ["#111114", "#2A2A30"],
                 size: product.sizes[0],
                 qty: 1,
               });

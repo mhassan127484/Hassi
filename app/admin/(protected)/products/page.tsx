@@ -109,7 +109,7 @@ export default function AdminProductsPage() {
             {filtered.map((p) => (
               <tr key={p.id}>
                 <td className="flex items-center gap-3 p-4">
-                  <ProductTile tile={p.colors[0]?.tile ?? ["#111114", "#2A2A30"]} image={p.colors[0]?.image} className="h-10 w-9 flex-shrink-0 rounded-sm" />
+                  <ProductTile tile={p.colors[0]?.tile ?? ["#111114", "#2A2A30"]} image={p.colors[0]?.image ?? p.images[0]} className="h-10 w-9 flex-shrink-0 rounded-sm" />
                   <span className="font-body text-sm text-ink">{p.name}</span>
                 </td>
                 <td className="p-4 font-body text-sm text-ink/70">{p.category}</td>

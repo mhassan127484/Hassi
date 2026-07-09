@@ -78,7 +78,7 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
                     onClick={onClose}
                     className="group flex items-center gap-4 rounded-sm p-2 transition-colors hover:bg-ink/[0.03]"
                   >
-                    <ProductTile tile={p.colors[0].tile} image={p.colors[0].image} className="h-16 w-16 flex-shrink-0 rounded-sm" />
+                    <ProductTile tile={p.colors[0].tile} image={p.colors[0].image ?? p.images[0]} className="h-16 w-16 flex-shrink-0 rounded-sm" />
                     <div>
                       <p className="font-body text-sm font-medium text-ink">{p.name}</p>
                       <p className="mt-0.5 font-body text-xs text-ink/50">{formatPrice(p.price)}</p>

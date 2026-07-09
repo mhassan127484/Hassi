@@ -33,7 +33,7 @@ export default function ProductCard({
             whileHover={{ scale: 1.04 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
-            <ProductTile tile={product.colors[0].tile} image={product.colors[0].image} className="aspect-[4/5]" />
+            <ProductTile tile={product.colors[0].tile} image={product.colors[0].image ?? product.images[0]} className="aspect-[4/5]" />
           </motion.div>
 
           <div className="absolute left-3 top-3 flex flex-col gap-1.5">
