@@ -2,8 +2,8 @@ import clsx from "clsx";
 import { Category } from "@/types";
 import { formatPrice } from "@/lib/data/products";
 
-export const PRICE_MIN = 3000;
-export const PRICE_MAX = 28000;
+export const PRICE_MIN = 0;
+export const PRICE_MAX = 300;
 
 const swatchHexByName: Record<string, string> = {
   "Ink / Cobalt": "#111114",
@@ -36,6 +36,8 @@ export default function FiltersSidebar({
   categories,
   brands,
   sizes: allSizes,
+  priceMin = PRICE_MIN,
+  priceMax = PRICE_MAX,
   setCategory,
   setMaxPrice,
   toggleColor,
@@ -47,6 +49,8 @@ export default function FiltersSidebar({
   categories: { name: Category }[];
   brands: string[];
   sizes: string[];
+  priceMin?: number;
+  priceMax?: number;
   setCategory: (c: Category | null) => void;
   setMaxPrice: (n: number) => void;
   toggleColor: (c: string) => void;
@@ -94,15 +98,15 @@ export default function FiltersSidebar({
         <p className="font-body text-xs uppercase tracking-widest text-stone">Price</p>
         <input
           type="range"
-          min={PRICE_MIN}
-          max={PRICE_MAX}
-          step={500}
+          min={priceMin}
+          max={priceMax}
+          step={1}
           value={filters.maxPrice}
           onChange={(e) => setMaxPrice(Number(e.target.value))}
           className="mt-4 w-full accent-cobalt"
         />
         <div className="mt-1 flex justify-between font-body text-xs text-ink/50">
-          <span>{formatPrice(PRICE_MIN)}</span>
+          <span>{formatPrice(priceMin)}</span>
           <span>Up to {formatPrice(filters.maxPrice)}</span>
         </div>
       </div>

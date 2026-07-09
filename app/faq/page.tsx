@@ -15,7 +15,7 @@ const faqs = [
   {
     question: "How long does shipping take?",
     answer:
-      "Standard shipping takes 5–7 business days and is free on orders over $54. Express shipping arrives in 2–3 business days for a flat $5.",
+      "Standard shipping takes 5–7 business days and is free on orders over $50. Express shipping arrives in 2–3 business days for a flat $5.",
   },
   {
     question: "Do you ship internationally?",

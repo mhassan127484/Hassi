@@ -1,16 +1,16 @@
 import { Truck, RotateCcw, ShieldCheck, Headset } from "lucide-react";
 
 const items = [
-  { icon: Truck, label: "Free Shipping", sub: "On orders over $54" },
+  { icon: Truck, label: "Free Shipping", sub: "On orders over $50" },
   { icon: RotateCcw, label: "Easy Returns", sub: "30-day return window" },
-  { icon: ShieldCheck, label: "Secure Payment", sub: "COD · JazzCash · Easypaisa" },
+  { icon: ShieldCheck, label: "Secure Payment", sub: "Visa · Mastercard" },
   { icon: Headset, label: "24/7 Support", sub: "We reply within a day" },
 ];
 
 export default function TrustBar() {
   return (
     <section className="border-b border-ink/10">
-      <div className="mx-auto grid max-w-[1400px] grid-cols-2 gap-6 px-6 py-10 md:grid-cols-4 md:px-10">
+      <div className="mx-auto grid max-w-[1400px] grid-cols-2 gap-4 px-6 py-6 md:grid-cols-4 md:px-10">
         {items.map((item) => (
           <div key={item.label} className="flex items-center gap-3">
             <item.icon className="h-6 w-6 flex-shrink-0 text-cobalt" strokeWidth={1.5} />

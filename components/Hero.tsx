@@ -28,7 +28,7 @@ export default function Hero({ heroProduct }: { heroProduct?: Product }) {
           transition={{ delay: 0.1 }}
           className="font-body text-xs uppercase tracking-widest text-stone"
         >
-          Autumn / Winter — Vol. 01
+          Autumn / Winter
         </motion.p>
         <motion.p
           initial={{ opacity: 0 }}
@@ -71,7 +71,7 @@ export default function Hero({ heroProduct }: { heroProduct?: Product }) {
                 href="/shop"
                 className="group flex items-center gap-3 rounded-full bg-ink px-7 py-4 font-body text-sm uppercase tracking-widest text-paper transition-colors hover:bg-cobalt"
               >
-                Shop Vol. 01
+                Shop Now
                 <ArrowUpRight
                   className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                   strokeWidth={2}
@@ -96,7 +96,6 @@ export default function Hero({ heroProduct }: { heroProduct?: Product }) {
               <ProductTile
                 tile={hero.colors[0].tile}
                 label={hero.drop}
-                indexLabel={hero.id}
                 className="aspect-[3/4] rounded-sm lg:aspect-auto lg:h-full lg:min-h-[26rem]"
               />
             </Link>

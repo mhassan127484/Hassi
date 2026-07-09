@@ -1,22 +1,43 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Instagram, Twitter, Facebook } from "lucide-react";
+import { Instagram, Facebook } from "lucide-react";
 import { useToastStore } from "@/store/toast";
 import { subscribeToNewsletter } from "@/lib/actions/newsletter";
+import { getCategories } from "@/lib/actions/products";
 
-const columns = [
-  { h: "Shop", links: [{ l: "Outerwear", href: "/shop?category=Outerwear" }, { l: "Knitwear", href: "/shop?category=Knitwear" }, { l: "Denim", href: "/shop?category=Denim" }, { l: "Accessories", href: "/shop?category=Accessories" }] },
-  { h: "Collections", links: [{ l: "Vol. 01", href: "/collections" }, { l: "Vol. 02", href: "/collections" }, { l: "New Arrivals", href: "/shop" }, { l: "Best Sellers", href: "/shop" }] },
-  { h: "Customer Service", links: [{ l: "Shipping", href: "/faq" }, { l: "Returns", href: "/faq" }, { l: "Track Order", href: "/track-order" }, { l: "Contact", href: "/contact" }] },
-  { h: "Company", links: [{ l: "About", href: "/about" }, { l: "Blog", href: "/blog" }, { l: "FAQ", href: "/faq" }, { l: "Careers", href: "/about" }] },
+const mainMenu = [
+  { l: "Home", href: "/" },
+  { l: "About Us", href: "/about" },
+  { l: "Shop All", href: "/shop" },
+  { l: "Contact Us", href: "/contact" },
+];
+
+const quickLinks = [
+  { l: "Privacy Policy", href: "/privacy" },
+  { l: "Terms & Conditions", href: "/terms" },
+  { l: "Refund & Return", href: "/refund-policy" },
+  { l: "FAQs", href: "/faq" },
 ];
 
 export default function Footer() {
   const [email, setEmail] = useState("");
+  const [collections, setCollections] = useState<{ l: string; href: string }[]>([]);
   const push = useToastStore((s) => s.push);
+
+  useEffect(() => {
+    getCategories().then((cats) =>
+      setCollections(cats.slice(0, 3).map((c) => ({ l: c.name, href: `/shop?category=${encodeURIComponent(c.name)}` })))
+    );
+  }, []);
+
+  const columns = [
+    { h: "Main Menu", links: mainMenu },
+    { h: "Quick Links", links: quickLinks },
+    { h: "Collections", links: collections },
+  ];
 
   const subscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +54,7 @@ export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-ink text-paper">
       <div className="mx-auto max-w-[1400px] px-6 pt-24 md:px-10">
-        <div className="grid gap-12 md:grid-cols-6">
+        <div className="grid gap-12 md:grid-cols-5">
           <div className="md:col-span-2">
             <p className="font-display text-2xl">Join the list.</p>
             <p className="mt-3 max-w-xs font-body text-sm text-paper/60">
@@ -54,12 +75,11 @@ export default function Footer() {
             </form>
             <div className="mt-6 flex items-center gap-4 text-paper/60">
               <a href="#" aria-label="Instagram" className="transition-colors hover:text-paper"><Instagram className="h-4 w-4" strokeWidth={1.5} /></a>
-              <a href="#" aria-label="Twitter" className="transition-colors hover:text-paper"><Twitter className="h-4 w-4" strokeWidth={1.5} /></a>
               <a href="#" aria-label="Facebook" className="transition-colors hover:text-paper"><Facebook className="h-4 w-4" strokeWidth={1.5} /></a>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-8 md:col-span-4 md:grid-cols-4">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 md:col-span-3">
             {columns.map((col) => (
               <div key={col.h}>
                 <p className="font-body text-xs uppercase tracking-widest text-paper/40">{col.h}</p>
@@ -94,9 +114,6 @@ export default function Footer() {
           <div className="flex items-center gap-3 text-paper/40">
             <span>Visa</span>
             <span>Mastercard</span>
-            <span>JazzCash</span>
-            <span>Easypaisa</span>
-            <span>COD</span>
           </div>
         </div>
       </div>

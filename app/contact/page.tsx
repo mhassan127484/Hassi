@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Phone, MapPin, Instagram, Twitter, Facebook, Check } from "lucide-react";
+import { Mail, Phone, MapPin, Instagram, Facebook, Check } from "lucide-react";
 import { submitContactForm } from "@/lib/api";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Button from "@/components/ui/Button";
@@ -50,7 +50,6 @@ export default function ContactPage() {
           </div>
           <div className="mt-10 flex items-center gap-4 text-ink/50">
             <a href="#" aria-label="Instagram" className="transition-colors hover:text-ink"><Instagram className="h-5 w-5" strokeWidth={1.5} /></a>
-            <a href="#" aria-label="Twitter" className="transition-colors hover:text-ink"><Twitter className="h-5 w-5" strokeWidth={1.5} /></a>
             <a href="#" aria-label="Facebook" className="transition-colors hover:text-ink"><Facebook className="h-5 w-5" strokeWidth={1.5} /></a>
           </div>
         </div>

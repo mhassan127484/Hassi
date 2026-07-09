@@ -10,12 +10,11 @@ import SearchOverlay from "./store/SearchOverlay";
 import MobileDrawer from "./store/MobileDrawer";
 
 const navLinks = [
-  { href: "/shop", label: "New In" },
-  { href: "/shop", label: "Shop" },
-  { href: "/collections", label: "Collections" },
-  { href: "/about", label: "About" },
-  { href: "/blog", label: "Blog" },
-  { href: "/contact", label: "Contact" },
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About Us" },
+  { href: "/shop", label: "Shop All" },
+  { href: "/track-order", label: "Order Tracking" },
+  { href: "/contact", label: "Contact Us" },
 ];
 
 export default function Navbar() {

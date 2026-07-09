@@ -14,6 +14,7 @@ export interface VariantInput {
 
 export interface ProductInput {
   name: string;
+  slug: string;
   brand: string;
   category: Category;
   price: number;
@@ -87,10 +88,23 @@ function slugify(name: string) {
   return name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
+async function uniqueSlug(supabase: ReturnType<typeof createClient>, desired: string, excludeId?: string) {
+  const base = slugify(desired) || "product";
+  let query = supabase.from("products").select("slug").ilike("slug", `${base}%`);
+  if (excludeId) query = query.neq("id", excludeId);
+  const { data: existing } = await query;
+  const taken = new Set((existing ?? []).map((p) => p.slug));
+  if (!taken.has(base)) return base;
+
+  let n = 2;
+  while (taken.has(`${base}-${n}`)) n++;
+  return `${base}-${n}`;
+}
+
 export async function createProduct(input: ProductInput) {
   await assertAdmin();
   const supabase = createClient();
-  const slug = `${slugify(input.name)}-${Date.now().toString(36)}`;
+  const slug = await uniqueSlug(supabase, input.slug || input.name);
 
   const { data: product, error } = await supabase
     .from("products")
@@ -135,11 +149,13 @@ export async function createProduct(input: ProductInput) {
 export async function updateProduct(id: string, input: ProductInput) {
   await assertAdmin();
   const supabase = createClient();
+  const slug = await uniqueSlug(supabase, input.slug || input.name, id);
 
   const { error } = await supabase
     .from("products")
     .update({
       name: input.name,
+      slug,
       brand: input.brand,
       price: input.price,
       category: input.category,

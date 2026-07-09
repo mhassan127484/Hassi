@@ -24,7 +24,6 @@ export default function ProductInteractive({
         activeIndex={activeColorIndex}
         onSelect={setActiveColorIndex}
         drop={product.drop}
-        indexLabel={product.id}
       />
 
       <div className="max-w-xl">

@@ -7,12 +7,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { X, User, Heart } from "lucide-react";
 
 const links = [
-  { href: "/shop", label: "New In" },
-  { href: "/shop", label: "Shop" },
-  { href: "/collections", label: "Collections" },
-  { href: "/about", label: "About" },
-  { href: "/blog", label: "Blog" },
-  { href: "/contact", label: "Contact" },
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About Us" },
+  { href: "/shop", label: "Shop All" },
+  { href: "/track-order", label: "Order Tracking" },
+  { href: "/contact", label: "Contact Us" },
 ];
 
 export default function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {

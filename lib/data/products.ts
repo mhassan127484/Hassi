@@ -65,7 +65,7 @@ function colorway(name: string, hex: string, tile: [string, string]): ProductCol
 const CARE = "Dry clean only";
 const MADE = "Made in Karachi, Pakistan";
 const SHIPPING =
-  "Free standard shipping on orders over $54. Standard delivery in 5–7 business days, express in 2–3 business days for $5.";
+  "Free standard shipping on orders over $50. Standard delivery in 5–7 business days, express in 2–3 business days for $5.";
 const RETURNS =
   "30-day returns on unworn pieces with tags attached. Store credit issued instantly; refunds to original payment method within 5–7 business days.";
 

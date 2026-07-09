@@ -39,6 +39,7 @@ export default function AdminProductsPage() {
   const handleSubmit = async (form: ResolvedProductFormState) => {
     const input = {
       name: form.name,
+      slug: form.slug,
       brand: form.brand,
       category: form.category,
       price: Number(form.price),

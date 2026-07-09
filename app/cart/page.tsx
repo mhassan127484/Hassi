@@ -14,8 +14,8 @@ import Button from "@/components/ui/Button";
 import EmptyState from "@/components/ui/EmptyState";
 import RelatedProducts from "@/components/store/RelatedProducts";
 
-const FREE_SHIPPING_THRESHOLD = 15000;
-const SHIPPING_FLAT = 1500;
+const FREE_SHIPPING_THRESHOLD = 50;
+const SHIPPING_FLAT = 5;
 
 export default function CartPage() {
   const { items, promo, updateQty, removeItem, applyPromo, clearPromo } = useCartStore();

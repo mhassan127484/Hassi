@@ -1,9 +1,9 @@
 import { Truck, RotateCcw, ShieldCheck } from "lucide-react";
 
 const items = [
-  { icon: Truck, label: "Free Shipping", sub: "Orders over $54" },
+  { icon: Truck, label: "Free Shipping", sub: "Orders over $50" },
   { icon: RotateCcw, label: "Easy Returns", sub: "30-day window" },
-  { icon: ShieldCheck, label: "Secure Payment", sub: "COD available" },
+  { icon: ShieldCheck, label: "Secure Payment", sub: "Visa · Mastercard" },
 ];
 
 export default function ProductTrustRow() {

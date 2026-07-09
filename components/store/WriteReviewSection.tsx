@@ -17,7 +17,6 @@ import { useToastStore } from "@/store/toast";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 import StarInput from "@/components/ui/StarInput";
-import Stars from "@/components/ui/Stars";
 
 const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
 
@@ -106,7 +105,15 @@ export default function WriteReviewSection({ productSlug }: { productSlug: strin
     setDeleting(false);
   };
 
-  if (eligibility === null || eligibility === "not-purchased") return null;
+  if (eligibility === null) return null;
+
+  if (eligibility === "not-purchased") {
+    return (
+      <p className="font-body text-sm text-ink/50">
+        Reviews are open to customers who've purchased and received this item.
+      </p>
+    );
+  }
 
   if (eligibility === "signed-out") {
     return (
@@ -121,27 +128,16 @@ export default function WriteReviewSection({ productSlug }: { productSlug: strin
 
   if (eligibility === "already-reviewed") {
     return (
-      <div className="rounded-sm border border-ink/10 p-4">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="font-body text-xs uppercase tracking-widest text-stone">Your review</p>
-            {myReview && <Stars rating={myReview.rating} className="mt-1.5" />}
-          </div>
-          <button
-            onClick={handleDelete}
-            disabled={deleting}
-            aria-label="Delete review"
-            className="text-ink/40 transition-colors hover:text-red-500 disabled:opacity-40"
-          >
-            <Trash2 className="h-4 w-4" strokeWidth={2} />
-          </button>
-        </div>
-        {myReview?.title && <p className="mt-2 font-body text-sm font-medium text-ink">{myReview.title}</p>}
-        {myReview?.body && <p className="mt-1 font-body text-sm text-ink/65">{myReview.body}</p>}
-        {myReview?.imageUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={myReview.imageUrl} alt="" className="mt-3 h-24 w-20 rounded-sm object-cover" />
-        )}
+      <div className="flex items-center justify-between gap-4 rounded-sm border border-ink/10 p-4">
+        <p className="font-body text-sm text-ink/60">You've reviewed this product — see below.</p>
+        <button
+          onClick={handleDelete}
+          disabled={deleting}
+          aria-label="Delete review"
+          className="flex-shrink-0 text-ink/40 transition-colors hover:text-red-500 disabled:opacity-40"
+        >
+          <Trash2 className="h-4 w-4" strokeWidth={2} />
+        </button>
       </div>
     );
   }

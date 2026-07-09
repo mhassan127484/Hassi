@@ -6,10 +6,8 @@ import { Address, CartLine, Order, OrderStatus } from "@/types";
 
 async function nextOrderNumber(): Promise<string> {
   const admin = createAdminClient();
-  const { data } = await admin.from("orders").select("number").order("created_at", { ascending: false }).limit(1);
-  const last = data?.[0]?.number;
-  const lastNum = last ? parseInt(last.replace(/\D/g, ""), 10) : 123450;
-  return `HASSI${(isNaN(lastNum) ? 123450 : lastNum) + 1}`;
+  const { count } = await admin.from("orders").select("*", { count: "exact", head: true });
+  return `HASSI${100 + (count ?? 0)}`;
 }
 
 export async function createOrder(input: {

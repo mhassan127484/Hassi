@@ -1,8 +1,6 @@
 const items = [
-  "Free shipping over $54",
-  "Vol. 01 — now live",
-  "Made for Karachi weather",
-  "COD · JazzCash · Easypaisa",
+  "Free shipping over $50",
+  "Visa · Mastercard",
   "30-day returns",
 ];
 

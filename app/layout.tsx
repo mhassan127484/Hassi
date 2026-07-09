@@ -5,7 +5,7 @@ import "./globals.css";
 import Chrome from "@/components/Chrome";
 
 export const metadata: Metadata = {
-  title: "Hassi — Vol. 01",
+  title: "Hassi",
   description:
     "Hassi is a modern apparel house. Considered outerwear, knitwear, and denim, made to be worn hard.",
 };

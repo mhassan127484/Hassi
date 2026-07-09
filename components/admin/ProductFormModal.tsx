@@ -26,8 +26,13 @@ export function tileFromHex(hex: string): [string, string] {
 export type VariantForm = { name: string; hex: string; file?: File; previewUrl?: string; existingImageUrl?: string };
 export type PhotoForm = { file?: File; previewUrl?: string; existingUrl?: string };
 
+function slugify(name: string) {
+  return name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
 export type ProductFormState = {
   name: string;
+  slug: string;
   brand: string;
   category: Category;
   price: string;
@@ -55,6 +60,7 @@ export type ResolvedProductFormState = Omit<ProductFormState, "colors" | "photos
 const blankVariant: VariantForm = { name: "Ink", hex: "#111114" };
 const blank: ProductFormState = {
   name: "",
+  slug: "",
   brand: "Hassi Standard",
   category: "Outerwear",
   price: "",
@@ -67,7 +73,7 @@ const blank: ProductFormState = {
   description: "",
   highlights: "",
   details: "",
-  shipping: "Free standard shipping on orders over $54.",
+  shipping: "Free standard shipping on orders over $50.",
   returns: "30-day returns on unworn pieces with tags attached.",
 };
 
@@ -109,13 +115,16 @@ export default function ProductFormModal({
   categories: string[];
 }) {
   const [form, setForm] = useState<ProductFormState>(blank);
+  const [slugTouched, setSlugTouched] = useState(false);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
+    setSlugTouched(!!initial);
     if (initial) {
       setForm({
         name: initial.name,
+        slug: initial.slug,
         brand: initial.brand,
         category: initial.category,
         price: String(initial.price),
@@ -217,6 +226,7 @@ export default function ProductFormModal({
       );
       await onSubmit({
         name: form.name,
+        slug: form.slug,
         brand: form.brand,
         category: form.category,
         price: form.price,
@@ -249,9 +259,25 @@ export default function ProductFormModal({
             required
             placeholder="Product name"
             value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            onChange={(e) => {
+              const name = e.target.value;
+              setForm((f) => ({ ...f, name, slug: slugTouched ? f.slug : slugify(name) }));
+            }}
             className="rounded-sm border border-ink/20 bg-transparent px-4 py-2.5 font-body text-sm text-ink focus:border-ink/60 focus:outline-none sm:col-span-2"
           />
+          <div className="sm:col-span-2">
+            <input
+              required
+              placeholder="url-slug"
+              value={form.slug}
+              onChange={(e) => {
+                setSlugTouched(true);
+                setForm({ ...form, slug: slugify(e.target.value) });
+              }}
+              className="w-full rounded-sm border border-ink/20 bg-transparent px-4 py-2.5 font-body text-sm text-ink focus:border-ink/60 focus:outline-none"
+            />
+            <p className="mt-1.5 font-body text-[11px] text-ink/40">/product/{form.slug || "..."}</p>
+          </div>
           <input
             required
             placeholder="Brand"

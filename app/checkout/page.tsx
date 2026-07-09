@@ -16,7 +16,7 @@ import { ShoppingBag } from "lucide-react";
 
 type FormState = Address & { email: string };
 
-const FREE_SHIPPING_THRESHOLD = 54;
+const FREE_SHIPPING_THRESHOLD = 50;
 const EXPRESS_COST = 5;
 
 const initialForm: FormState = {

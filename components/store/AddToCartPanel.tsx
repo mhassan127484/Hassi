@@ -59,24 +59,28 @@ export default function AddToCartPanel({
 
   return (
     <div className="mt-10">
-      <p className="font-body text-xs uppercase tracking-widest text-stone">
-        Color — {activeColor.name}
-      </p>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {product.colors.map((c, i) => (
-          <button
-            key={c.name}
-            onClick={() => onColorChange(i)}
-            aria-label={c.name}
-            aria-pressed={i === activeColorIndex}
-            className={clsx(
-              "h-9 w-9 rounded-full border-2 transition-all",
-              i === activeColorIndex ? "border-cobalt" : "border-transparent hover:border-ink/30"
-            )}
-            style={{ background: c.hex }}
-          />
-        ))}
-      </div>
+      {product.colors.length > 1 && (
+        <>
+          <p className="font-body text-xs uppercase tracking-widest text-stone">
+            Color — {activeColor.name}
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {product.colors.map((c, i) => (
+              <button
+                key={c.name}
+                onClick={() => onColorChange(i)}
+                aria-label={c.name}
+                aria-pressed={i === activeColorIndex}
+                className={clsx(
+                  "h-9 w-9 rounded-full border-2 transition-all",
+                  i === activeColorIndex ? "border-cobalt" : "border-transparent hover:border-ink/30"
+                )}
+                style={{ background: c.hex }}
+              />
+            ))}
+          </div>
+        </>
+      )}
 
       <div className="mt-8 flex items-center justify-between">
         <p className="font-body text-xs uppercase tracking-widest text-stone">{requiresSize ? "Size" : "Availability"}</p>

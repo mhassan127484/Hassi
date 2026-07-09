@@ -102,7 +102,7 @@ function ShopContent() {
 
       <div className="mt-6 flex flex-col gap-6 border-b border-ink/10 pb-8 md:flex-row md:items-end md:justify-between">
         <h1 className="font-display text-6xl font-semibold tracking-tightest text-ink md:text-8xl">
-          {category ?? "Vol. 01"}
+          {category ?? "Shop All"}
         </h1>
         <div className="flex items-center gap-3">
           <button
