@@ -49,8 +49,12 @@ export default async function Home() {
               className="group relative flex aspect-[4/3] flex-col justify-between bg-paper p-6 transition-colors hover:bg-mist"
             >
               <span
-                className="h-10 w-10 rounded-full"
-                style={{ background: `linear-gradient(135deg, ${c.tile[0]}, ${c.tile[1]})` }}
+                className="h-10 w-10 rounded-full bg-cover bg-center"
+                style={
+                  c.image
+                    ? { backgroundImage: `url(${c.image})` }
+                    : { background: `linear-gradient(135deg, ${c.tile[0]}, ${c.tile[1]})` }
+                }
               />
               <div>
                 <p className="font-body text-xs uppercase tracking-widest text-stone">

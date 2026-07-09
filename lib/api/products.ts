@@ -47,7 +47,15 @@ function toProduct(row: ProductRow, colors: ColorRow[], reviews: ReviewRow[] = [
     tags: row.tags as Product["tags"],
     reviews: reviews
       .filter((r) => r.product_id === row.id)
-      .map((r) => ({ id: r.id, author: r.author_name, rating: r.rating, date: r.created_at, title: r.title, body: r.body })),
+      .map((r) => ({
+        id: r.id,
+        author: r.author_name,
+        rating: r.rating,
+        date: r.created_at,
+        title: r.title,
+        body: r.body,
+        image: r.image_url ?? undefined,
+      })),
   };
 }
 
@@ -103,13 +111,14 @@ export async function getProductsByCategory(category: string): Promise<Product[]
   return all.filter((p) => p.category === category);
 }
 
-export async function getCategories(): Promise<{ name: Category; blurb: string; tile: [string, string] }[]> {
+export async function getCategories(): Promise<{ name: Category; blurb: string; tile: [string, string]; image?: string }[]> {
   const supabase = createClient();
   const { data } = await supabase.from("categories").select("*").order("created_at");
   return (data ?? []).map((c) => ({
     name: c.name,
     blurb: c.blurb,
     tile: [c.tile_hex, shade(c.tile_hex, -60)] as [string, string],
+    image: c.image_url ?? undefined,
   }));
 }
 
@@ -147,6 +156,6 @@ export async function searchProducts(query: string): Promise<Product[]> {
     .slice(0, 6);
 }
 
-export function formatPrice(pkr: number): string {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(pkr / 278);
+export function formatPrice(usd: number): string {
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(usd);
 }

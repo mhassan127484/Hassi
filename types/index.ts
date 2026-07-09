@@ -19,6 +19,7 @@ export interface Review {
   date: string;
   title: string;
   body: string;
+  image?: string;
 }
 
 export interface Product {

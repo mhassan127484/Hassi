@@ -37,6 +37,7 @@ create table if not exists categories (
   name text unique not null,
   blurb text not null default '',
   tile_hex text not null default '#111114',
+  image_url text,
   created_at timestamptz not null default now()
 );
 
@@ -106,6 +107,7 @@ create table if not exists reviews (
   rating int not null check (rating between 1 and 5),
   title text not null default '',
   body text not null default '',
+  image_url text,
   created_at timestamptz not null default now()
 );
 
@@ -287,6 +289,20 @@ create policy "product_images_public_read" on storage.objects for select
 create policy "product_images_admin_write" on storage.objects for all
   using (bucket_id = 'product-images' and is_admin())
   with check (bucket_id = 'product-images' and is_admin());
+
+-- ─────────────────────────────────────────────────────────────
+-- Storage bucket for customer review photos
+-- ─────────────────────────────────────────────────────────────
+insert into storage.buckets (id, name, public)
+values ('review-images', 'review-images', true)
+on conflict (id) do nothing;
+
+create policy "review_images_public_read" on storage.objects for select
+  using (bucket_id = 'review-images');
+create policy "review_images_authenticated_write" on storage.objects for insert to authenticated
+  with check (bucket_id = 'review-images');
+create policy "review_images_owner_delete" on storage.objects for delete
+  using (bucket_id = 'review-images' and (owner = auth.uid() or is_admin()));
 
 -- ─────────────────────────────────────────────────────────────
 -- Make yourself an admin after signing up once through the app:

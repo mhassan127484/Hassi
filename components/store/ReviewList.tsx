@@ -16,6 +16,10 @@ export default function ReviewList({ reviews }: { reviews: Review[] }) {
           <Stars rating={r.rating} className="mt-2" />
           <p className="mt-2 font-body text-sm font-medium text-ink">{r.title}</p>
           <p className="mt-1 font-body text-sm leading-relaxed text-ink/65">{r.body}</p>
+          {r.image && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={r.image} alt="" className="mt-3 h-24 w-20 rounded-sm object-cover" />
+          )}
         </div>
       ))}
     </div>

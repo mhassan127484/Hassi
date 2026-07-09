@@ -16,8 +16,8 @@ import { ShoppingBag } from "lucide-react";
 
 type FormState = Address & { email: string };
 
-const FREE_SHIPPING_THRESHOLD = 15000;
-const EXPRESS_COST = 1500;
+const FREE_SHIPPING_THRESHOLD = 54;
+const EXPRESS_COST = 5;
 
 const initialForm: FormState = {
   email: "",
@@ -42,7 +42,7 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
 
   const subtotal = useMemo(() => cartSubtotal(items), [items]);
-  const baseShipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 1500;
+  const baseShipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 5;
   const shipping = shippingMethod === "Express" ? baseShipping + EXPRESS_COST : baseShipping;
   const discount = promo ? Math.round(subtotal * 0.1) : 0;
   const total = subtotal + shipping - discount;

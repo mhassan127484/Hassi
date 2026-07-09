@@ -272,7 +272,7 @@ export default function ProductFormModal({
             required
             type="number"
             min={0}
-            placeholder="Price (PKR)"
+            placeholder="Price (USD)"
             value={form.price}
             onChange={(e) => setForm({ ...form, price: e.target.value })}
             className="rounded-sm border border-ink/20 bg-transparent px-4 py-2.5 font-body text-sm text-ink focus:border-ink/60 focus:outline-none"

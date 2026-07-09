@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { assertAdmin } from "./adminGuard";
 
 export interface AdminCategory {
@@ -9,6 +10,7 @@ export interface AdminCategory {
   name: string;
   blurb: string;
   tileHex: string;
+  imageUrl?: string;
   productCount: number;
 }
 
@@ -16,6 +18,7 @@ export interface CategoryInput {
   name: string;
   blurb: string;
   tileHex: string;
+  imageUrl?: string;
 }
 
 function revalidateStorefront() {
@@ -41,6 +44,7 @@ export async function getAdminCategories(): Promise<AdminCategory[]> {
     name: c.name,
     blurb: c.blurb,
     tileHex: c.tile_hex,
+    imageUrl: c.image_url ?? undefined,
     productCount: counts.get(c.name) ?? 0,
   }));
 }
@@ -50,7 +54,7 @@ export async function createCategory(input: CategoryInput) {
   const supabase = createClient();
   const { error } = await supabase
     .from("categories")
-    .insert({ name: input.name, blurb: input.blurb, tile_hex: input.tileHex });
+    .insert({ name: input.name, blurb: input.blurb, tile_hex: input.tileHex, image_url: input.imageUrl });
   if (error) throw new Error(error.message);
 
   revalidatePath("/admin/categories");
@@ -66,7 +70,7 @@ export async function updateCategory(id: string, input: CategoryInput) {
 
   const { error } = await supabase
     .from("categories")
-    .update({ name: input.name, blurb: input.blurb, tile_hex: input.tileHex })
+    .update({ name: input.name, blurb: input.blurb, tile_hex: input.tileHex, image_url: input.imageUrl })
     .eq("id", id);
   if (error) throw new Error(error.message);
 
@@ -97,4 +101,20 @@ export async function deleteCategory(id: string) {
 
   revalidatePath("/admin/categories");
   revalidateStorefront();
+}
+
+export async function uploadCategoryImage(formData: FormData): Promise<string> {
+  await assertAdmin();
+  const file = formData.get("file") as File | null;
+  if (!file) throw new Error("No file provided");
+
+  const ext = file.name.split(".").pop() || "jpg";
+  const path = `categories/${crypto.randomUUID()}.${ext}`;
+
+  const admin = createAdminClient();
+  const { error } = await admin.storage.from("product-images").upload(path, file, { contentType: file.type });
+  if (error) throw new Error(error.message);
+
+  const { data } = admin.storage.from("product-images").getPublicUrl(path);
+  return data.publicUrl;
 }

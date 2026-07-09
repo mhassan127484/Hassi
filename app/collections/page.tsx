@@ -11,7 +11,7 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 export default function CollectionsPage() {
   const [active, setActive] = useState<Category | "All">("All");
-  const [categories, setCategories] = useState<{ name: Category; blurb: string; tile: [string, string] }[]>([]);
+  const [categories, setCategories] = useState<{ name: Category; blurb: string; tile: [string, string]; image?: string }[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
@@ -24,10 +24,7 @@ export default function CollectionsPage() {
   const tabs: (Category | "All")[] = useMemo(() => ["All", ...categories.map((c) => c.name)], [categories]);
 
   const collections = useMemo(
-    () => [
-      { title: "Vol. 01 — Essentials", href: "/shop?drop=Vol.%2001", category: null as Category | null, tile: ["#111114", "#2A2A30"] as [string, string] },
-      ...categories.map((c) => ({ title: c.name, href: `/shop?category=${encodeURIComponent(c.name)}`, category: c.name as Category, tile: c.tile })),
-    ],
+    () => categories.map((c) => ({ title: c.name, href: `/shop?category=${encodeURIComponent(c.name)}`, category: c.name as Category, tile: c.tile, image: c.image })),
     [categories]
   );
 
@@ -76,13 +73,17 @@ export default function CollectionsPage() {
               className="group relative flex aspect-[4/5] flex-col justify-end overflow-hidden rounded-sm"
             >
               <div
-                className="absolute inset-0 transition-transform duration-700 group-hover:scale-105"
-                style={{ background: `radial-gradient(120% 120% at 25% 15%, ${c.tile[0]} 0%, ${c.tile[1]} 70%)` }}
+                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                style={
+                  c.image
+                    ? { backgroundImage: `url(${c.image})` }
+                    : { background: `radial-gradient(120% 120% at 25% 15%, ${c.tile[0]} 0%, ${c.tile[1]} 70%)` }
+                }
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/0 to-ink/0" />
               <div className="relative z-10 p-6 text-paper">
                 <p className="font-body text-xs uppercase tracking-widest text-paper/70">
-                  {c.category ? `${products.filter((p) => p.category === c.category).length} pieces` : `${products.length} pieces`}
+                  {products.filter((p) => p.category === c.category).length} pieces
                 </p>
                 <h3 className="mt-1 font-display text-3xl font-semibold tracking-tightest">{c.title}</h3>
                 <span className="mt-4 inline-flex items-center gap-2 font-body text-xs uppercase tracking-widest">

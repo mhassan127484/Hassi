@@ -8,6 +8,7 @@ import ProductInteractive from "@/components/store/ProductInteractive";
 import ProductTrustRow from "@/components/store/ProductTrustRow";
 import RelatedProducts from "@/components/store/RelatedProducts";
 import ReviewList from "@/components/store/ReviewList";
+import WriteReviewSection from "@/components/store/WriteReviewSection";
 
 export default async function ProductPage({ params }: { params: { slug: string } }) {
   const product = await getProduct(params.slug);
@@ -82,6 +83,9 @@ export default async function ProductPage({ params }: { params: { slug: string }
                   Reviews ({product.reviewCount})
                 </p>
                 <Stars rating={product.rating} />
+              </div>
+              <div className="mt-4">
+                <WriteReviewSection productSlug={product.slug} />
               </div>
               <ReviewList reviews={product.reviews} />
             </div>

@@ -95,7 +95,7 @@ export default function AdminCategoriesPage() {
             {filtered.map((c) => (
               <tr key={c.id}>
                 <td className="flex items-center gap-3 p-4">
-                  <ProductTile tile={tileFromHex(c.tileHex)} className="h-10 w-9 flex-shrink-0 rounded-sm" />
+                  <ProductTile tile={tileFromHex(c.tileHex)} image={c.imageUrl} className="h-10 w-9 flex-shrink-0 rounded-sm" />
                   <span className="font-body text-sm text-ink">{c.name}</span>
                 </td>
                 <td className="p-4 font-body text-sm text-ink/70">{c.blurb}</td>

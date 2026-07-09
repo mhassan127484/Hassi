@@ -15,6 +15,7 @@ type CategoryRow = {
   name: string;
   blurb: string;
   tile_hex: string;
+  image_url: string | null;
   created_at: string;
 };
 
@@ -65,6 +66,7 @@ type ReviewRow = {
   rating: number;
   title: string;
   body: string;
+  image_url: string | null;
   created_at: string;
 };
 

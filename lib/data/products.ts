@@ -471,9 +471,6 @@ export function getRelatedProducts(product: Product, count = 4): Product[] {
     .slice(0, count);
 }
 
-/** Stored prices are PKR amounts; display converts to USD at a fixed rate. */
-export const PKR_TO_USD_RATE = 278;
-
-export function formatPrice(pkr: number): string {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(pkr / PKR_TO_USD_RATE);
+export function formatPrice(usd: number): string {
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(usd);
 }

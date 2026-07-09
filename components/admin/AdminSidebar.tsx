@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, Package, ShoppingCart, BarChart3, Newspaper, Tag, LogOut } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingCart, BarChart3, Newspaper, Tag, Star, LogOut } from "lucide-react";
 import clsx from "clsx";
 import { createClient } from "@/lib/supabase/client";
 
@@ -11,6 +11,7 @@ const links = [
   { href: "/admin/products", label: "Products", icon: Package },
   { href: "/admin/categories", label: "Categories", icon: Tag },
   { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
+  { href: "/admin/reviews", label: "Reviews", icon: Star },
   { href: "/admin/blog", label: "Blog", icon: Newspaper },
   { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
 ];
