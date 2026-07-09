@@ -8,7 +8,6 @@ import ProductTile from "@/components/ProductTile";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 
-const categories: Category[] = ["Outerwear", "Knitwear", "Denim", "Accessories", "Footwear", "Bags"];
 const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
 
 export function shade(hex: string, amount: number): string {
@@ -101,11 +100,13 @@ export default function ProductFormModal({
   onClose,
   onSubmit,
   initial,
+  categories,
 }: {
   open: boolean;
   onClose: () => void;
   onSubmit: (form: ResolvedProductFormState) => Promise<void>;
   initial?: AdminProduct | null;
+  categories: string[];
 }) {
   const [form, setForm] = useState<ProductFormState>(blank);
   const [error, setError] = useState("");
@@ -131,7 +132,7 @@ export default function ProductFormModal({
         returns: initial.returns,
       });
     } else {
-      setForm(blank);
+      setForm({ ...blank, category: categories[0] ?? "" });
     }
     setError("");
   }, [initial, open]);

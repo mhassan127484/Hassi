@@ -10,6 +10,14 @@ type ProfileRow = {
   created_at: string;
 };
 
+type CategoryRow = {
+  id: string;
+  name: string;
+  blurb: string;
+  tile_hex: string;
+  created_at: string;
+};
+
 type ProductRow = {
   id: string;
   slug: string;
@@ -141,6 +149,7 @@ export type Database = {
         { id: string; full_name?: string | null; phone?: string | null; is_admin?: boolean },
         { full_name?: string | null; phone?: string | null; is_admin?: boolean }
       >;
+      categories: Table<CategoryRow, Partial<CategoryRow> & { name: string }, Partial<CategoryRow>>;
       products: Table<
         ProductRow,
         Partial<ProductRow> & { slug: string; name: string; price: number; category: string },

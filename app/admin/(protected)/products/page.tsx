@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
 import { getAdminProducts, createProduct, updateProduct, deleteProduct } from "@/lib/actions/admin-products";
+import { getAdminCategories } from "@/lib/actions/admin-categories";
 import { useToastStore } from "@/store/toast";
 import { formatPrice } from "@/lib/data/products";
 import { AdminProduct } from "@/types";
@@ -14,6 +15,7 @@ import ProductFormModal, { ResolvedProductFormState } from "@/components/admin/P
 export default function AdminProductsPage() {
   const push = useToastStore((s) => s.push);
   const [products, setProducts] = useState<AdminProduct[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
@@ -23,6 +25,7 @@ export default function AdminProductsPage() {
 
   useEffect(() => {
     refresh();
+    getAdminCategories().then((c) => setCategories(c.map((cat) => cat.name)));
   }, []);
 
   const filtered = useMemo(
@@ -131,7 +134,7 @@ export default function AdminProductsPage() {
         )}
       </div>
 
-      <ProductFormModal open={modalOpen} onClose={() => setModalOpen(false)} onSubmit={handleSubmit} initial={editing} />
+      <ProductFormModal open={modalOpen} onClose={() => setModalOpen(false)} onSubmit={handleSubmit} initial={editing} categories={categories} />
     </div>
   );
 }

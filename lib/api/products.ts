@@ -51,23 +51,6 @@ function toProduct(row: ProductRow, colors: ColorRow[], reviews: ReviewRow[] = [
   };
 }
 
-const CATEGORY_TILES: Record<string, [string, string]> = {
-  Outerwear: ["#2B4CF0", "#0B1B4D"],
-  Knitwear: ["#E4E7F5", "#8A8681"],
-  Denim: ["#2A2A30", "#8A8681"],
-  Footwear: ["#F2EEE6", "#C9C2B4"],
-  Accessories: ["#C9C2B4", "#8A8681"],
-  Bags: ["#B5502D", "#2A2A30"],
-};
-const CATEGORY_BLURB: Record<string, string> = {
-  Outerwear: "Coats, jackets, shells",
-  Knitwear: "Sweaters, hoodies, cardigans",
-  Denim: "Jeans and trousers",
-  Footwear: "Sneakers and boots",
-  Accessories: "Scarves, caps, belts",
-  Bags: "Totes, holdalls, crossbody",
-};
-
 async function fetchAllProductsWithColors() {
   const supabase = createClient();
   const { data: products, error } = await supabase
@@ -120,13 +103,13 @@ export async function getProductsByCategory(category: string): Promise<Product[]
   return all.filter((p) => p.category === category);
 }
 
-export async function getCategories() {
-  const all = await getProducts();
-  const names = Array.from(new Set(all.map((p) => p.category)));
-  return names.map((name) => ({
-    name: name as Category,
-    blurb: CATEGORY_BLURB[name] ?? "",
-    tile: CATEGORY_TILES[name] ?? (["#111114", "#2A2A30"] as [string, string]),
+export async function getCategories(): Promise<{ name: Category; blurb: string; tile: [string, string] }[]> {
+  const supabase = createClient();
+  const { data } = await supabase.from("categories").select("*").order("created_at");
+  return (data ?? []).map((c) => ({
+    name: c.name,
+    blurb: c.blurb,
+    tile: [c.tile_hex, shade(c.tile_hex, -60)] as [string, string],
   }));
 }
 

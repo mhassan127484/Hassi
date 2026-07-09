@@ -9,10 +9,8 @@ import { getCategories, getProducts } from "@/lib/actions/products";
 import { Category, Product } from "@/types";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
-const tabs: (Category | "All")[] = ["All", "Outerwear", "Knitwear", "Denim", "Footwear", "Accessories", "Bags"];
-
 export default function CollectionsPage() {
-  const [active, setActive] = useState<(typeof tabs)[number]>("All");
+  const [active, setActive] = useState<Category | "All">("All");
   const [categories, setCategories] = useState<{ name: Category; blurb: string; tile: [string, string] }[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
 
@@ -22,6 +20,8 @@ export default function CollectionsPage() {
       setProducts(p);
     });
   }, []);
+
+  const tabs: (Category | "All")[] = useMemo(() => ["All", ...categories.map((c) => c.name)], [categories]);
 
   const collections = useMemo(
     () => [

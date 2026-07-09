@@ -30,6 +30,26 @@ create trigger on_auth_user_created
   for each row execute procedure handle_new_user();
 
 -- ─────────────────────────────────────────────────────────────
+-- Categories
+-- ─────────────────────────────────────────────────────────────
+create table if not exists categories (
+  id uuid primary key default gen_random_uuid(),
+  name text unique not null,
+  blurb text not null default '',
+  tile_hex text not null default '#111114',
+  created_at timestamptz not null default now()
+);
+
+insert into categories (name, blurb, tile_hex) values
+  ('Outerwear', 'Coats, jackets, shells', '#2B4CF0'),
+  ('Knitwear', 'Sweaters, hoodies, cardigans', '#E4E7F5'),
+  ('Denim', 'Jeans and trousers', '#2A2A30'),
+  ('Footwear', 'Sneakers and boots', '#F2EEE6'),
+  ('Accessories', 'Scarves, caps, belts', '#C9C2B4'),
+  ('Bags', 'Totes, holdalls, crossbody', '#B5502D')
+on conflict (name) do nothing;
+
+-- ─────────────────────────────────────────────────────────────
 -- Products + variants
 -- ─────────────────────────────────────────────────────────────
 create table if not exists products (
@@ -190,6 +210,7 @@ create table if not exists newsletter_subscribers (
 -- ─────────────────────────────────────────────────────────────
 alter table profiles enable row level security;
 alter table products enable row level security;
+alter table categories enable row level security;
 alter table product_colors enable row level security;
 alter table product_images enable row level security;
 alter table reviews enable row level security;
@@ -208,6 +229,10 @@ $$ language sql security definer stable;
 -- profiles: users read/update their own row; admins read all.
 create policy "profiles_select_own_or_admin" on profiles for select using (auth.uid() = id or is_admin());
 create policy "profiles_update_own" on profiles for update using (auth.uid() = id);
+
+-- categories: public read; admin-only writes.
+create policy "categories_public_read" on categories for select using (true);
+create policy "categories_admin_write" on categories for all using (is_admin()) with check (is_admin());
 
 -- products / product_colors: public read; admin-only writes.
 create policy "products_public_read" on products for select using (true);

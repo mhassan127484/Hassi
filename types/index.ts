@@ -1,10 +1,5 @@
-export type Category =
-  | "Outerwear"
-  | "Knitwear"
-  | "Denim"
-  | "Accessories"
-  | "Footwear"
-  | "Bags";
+/** Categories are admin-managed (see the Categories admin page) rather than a fixed set. */
+export type Category = string;
 
 export type Tag = "new" | "bestseller" | "low-stock";
 
